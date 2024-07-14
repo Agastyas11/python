@@ -48,6 +48,8 @@ if WannaPlay == "y":
       elif sum(user_cards) == 0 or sum(user_cards) == 21:
         print("BLACKJACK! you win! :)")
         GameEnd = True
+      elif sum(user_cards) == sum(user_cards):
+        PassOrNot = input("Type 'y' to get another card, type 'n' to pass: ")
     elif PassOrNot == "n":
       print(f"Your final hand: {user_cards}, current score: {sum(user_cards)}")
       abovefifteen = False
