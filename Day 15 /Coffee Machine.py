@@ -77,3 +77,4 @@ while 0 == 0:
     else:
         resources = drink_exchange(UserChoice)
         money_exchange(UserChoice)
+    
