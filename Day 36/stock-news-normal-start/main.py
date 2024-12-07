@@ -3,7 +3,7 @@ import requests
 STOCK_NAME = "TSLA"
 COMPANY_NAME = "Tesla"
 
-STOCK_ENDPOINT = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&apikey=VFLQWAJYEVYED2EZ"
+STOCK_ENDPOINT = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&apikey=APIKEY"
 NEWS_ENDPOINT = "https://newsapi.org/v2/everything"
 
 response = requests.get(url=STOCK_ENDPOINT)
@@ -20,7 +20,7 @@ average_close = (ereyesterdays_close + yesterdays_close) / 2.0
 percentage_difference = round((positive_difference / average_close) * 100)
 
 if percentage_difference >= 5:
-    news_api = f"https://newsapi.org/v2/everything?q={COMPANY_NAME}&from={last_refreshed}&sortBy=popularity&apiKey=404c8e9309264a64a937bd06cf7056df"
+    news_api = f"https://newsapi.org/v2/everything?q={COMPANY_NAME}&from={last_refreshed}&sortBy=popularity&apiKey=APIKEY"
     response_news = requests.get(news_api)
     article_data = response_news.json()
     first_three_articles = article_data['articles'][3::]
