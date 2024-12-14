@@ -3,15 +3,15 @@ from datetime import *
 
 # site parameters
 url = 'https://trackapi.nutritionix.com/v2/natural/exercise'
-sheety_url = "https://api.sheety.co/8a03ef81b502c22944219aeacd83bff0/myWorkouts/workouts"
-app_id = "c90d0ec1"
-app_key = "f8ef345685e51816cecdaaf743e7b615"
+sheety_url = "https://api.sheety.co/ /myWorkouts/workouts"
+app_id = 
+app_key = 
 
 # personal data
-metric_weight = 55
-metric_height = 170
-age = 15
-gender = "Male"
+metric_weight = 
+metric_height = 
+age = 
+gender = 
 
 # description of exercise
 exercise_query = input("What exercises did you do mate?: ")
