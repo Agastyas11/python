@@ -33,7 +33,6 @@ headers = {
 response = requests.post(url, json=parameters, headers=headers)
 data = response.json()
 
-print(data)
 
 # assigning data
 date = datetime.now().strftime("%Y-%m-%d")
@@ -53,6 +52,6 @@ for exercise in data["exercises"]:
 
 # posting data to spreadsheet
 sheety_post = requests.post(sheety_url, json=sheet_inputs)
-print(sheety_post.text)
+
 
 
