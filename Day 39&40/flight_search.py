@@ -1,4 +1,9 @@
 import requests
+from datetime import datetime
+import os
+
+# Load environment variables from .env file
+
 
 IATA_ENDPOINT = "https://test.api.amadeus.com/v1/reference-data/locations/cities"
 FLIGHT_ENDPOINT = "https://test.api.amadeus.com/v2/shopping/flight-offers"
@@ -6,12 +11,28 @@ TOKEN_ENDPOINT = "https://test.api.amadeus.com/v1/security/oauth2/token"
 
 
 class FlightSearch:
+
     def __init__(self):
-        self._api_key = "ue57ayRoglAnLSzkT62pQdAwornSWDhG"
-        self._api_secret = "wPLcAGMGGO1p79Bg"
+        """
+        Initialize an instance of the FlightSearch class.
+
+        This constructor performs the following tasks:
+        1. Retrieves the API key and secret from the environment variables 'AMADEUS_API_KEY'
+        and 'AMADEUS_SECRET' respectively.
+
+        Instance Variables:
+        _api_key (str): The API key for authenticating with Amadeus, sourced from the .env file
+        _api_secret (str): The API secret for authenticating with Amadeus, sourced from the .env file.
+        _token (str): The authentication token obtained by calling the _get_new_token method.
+        """
+        self._api_key = os.environ["AMADEUS_API_KEY"]
+        self._api_secret = os.environ["AMADEUS_SECRET"]
+        # Getting a new token every time program is run. Could reuse unexpired tokens as an extension.
         self._token = self._get_new_token()
 
     def _get_new_token(self):
+
+        # Header with content type as per Amadeus documentation
         header = {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -20,15 +41,15 @@ class FlightSearch:
             'client_id': self._api_key,
             'client_secret': self._api_secret
         }
-        response = requests.post(url="https://test.api.amadeus.com/v1/security/oauth2/token", headers=header, data=body)
+        response = requests.post(url=TOKEN_ENDPOINT, headers=header, data=body)
 
         # New bearer token. Typically expires in 1799 seconds (30min)
         print(f"Your token is {response.json()['access_token']}")
         print(f"Your token expires in {response.json()['expires_in']} seconds")
         return response.json()['access_token']
 
-    def get_flight_data(self, city_name):
-        # Return "TESTING" for now to make sure Sheety is working. Get TEQUILA API data later.
+    def get_destination_code(self, city_name):
+
         print(f"Using this token to get destination {self._token}")
         headers = {"Authorization": f"Bearer {self._token}"}
         query = {
@@ -41,7 +62,6 @@ class FlightSearch:
             headers=headers,
             params=query
         )
-
         print(f"Status code {response.status_code}. Airport IATA: {response.text}")
         try:
             code = response.json()["data"][0]['iataCode']
@@ -54,15 +74,19 @@ class FlightSearch:
 
         return code
 
-    def check_flights(self, origin_city_code, destination_city_code, from_time, to_time):
+    def check_flights(self, origin_city_code, destination_city_code, from_time, to_time, is_direct=True):
+
+
+        # print(f"Using this token to check_flights() {self._token}")
         headers = {"Authorization": f"Bearer {self._token}"}
+        # nonStop must be "true" or "false" string. Python booleans won't work
         query = {
             "originLocationCode": origin_city_code,
             "destinationLocationCode": destination_city_code,
             "departureDate": from_time.strftime("%Y-%m-%d"),
             "returnDate": to_time.strftime("%Y-%m-%d"),
             "adults": 1,
-            "nonStop": "true",
+            "nonStop": "true" if is_direct else "false",
             "currencyCode": "GBP",
             "max": "10",
         }
